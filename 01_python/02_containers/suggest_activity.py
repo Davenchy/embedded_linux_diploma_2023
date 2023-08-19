@@ -15,7 +15,7 @@ class NoActivityException(Exception):
 
 
 def get_activity(participants=1, activity_type=None):
-    """Get the activities nearby the user's location
+    """Get an activiy
 
     Check docs of the Bored API for more information about the returned data
 
@@ -66,7 +66,7 @@ if __name__ == "__main__":
     try:
         activity = get_activity(args.participants, args.type)
     except FailedException:
-        print("Failed to find activity")
+        print("Failed to connect or to fetch an activity")
         exit(1)
     except NoActivityException:
         print("No activity found")
