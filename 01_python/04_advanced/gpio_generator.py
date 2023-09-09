@@ -16,8 +16,8 @@ void Init_PORTA_DIR(void)
     data = ''
     for i in range(8):
         value = input(
-            'Enter Bit {} mode(on/1, off/0(default)): '.format(i)).strip()
-        value = '1' if value in {'on', '1'} else '0'
+            'Enter Bit {} mode(in/1, out/0(default)): '.format(i)).strip()
+        value = '1' if value in {'in', '1'} else '0'
         data += value
 
     with open(filename, 'w') as f:

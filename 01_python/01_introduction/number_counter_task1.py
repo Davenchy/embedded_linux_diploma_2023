@@ -24,5 +24,5 @@ while 1:
     number_to_count = int(number_to_count_input)
     count = numbers.count(number_to_count)
 
-    print(f"\nThe list: [{', '.join([str(c) for c in numbers])}]")
+    print(f"\nThe list: {numbers}")
     print(f"Has the number {number_to_count} occurred {count} times")
