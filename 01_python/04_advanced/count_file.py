@@ -2,6 +2,7 @@
 """Counts the number of lines/words in a file."""
 
 import sys
+from functools import reduce
 
 
 def count_file(filename, readlines=True):
@@ -12,13 +13,13 @@ def count_file(filename, readlines=True):
         readlines (bool): Whether to count lines or words."""
 
     with open(filename) as f:
-        count = 0
-        for line in f:
-            if readlines:
-                count += 1
-            else:
-                count += len(line.split())
-    return count
+        if readlines:
+            # count file lines
+            return f"{len(f.readlines())} line/s"
+
+        # count words on each file line
+        count = reduce(lambda a, b: a + len(b.split()), f.readlines(), 0)
+        return f"{count} word/s"
 
 
 if __name__ == '__main__':
@@ -29,6 +30,8 @@ if __name__ == '__main__':
 
     mode = sys.argv[1]
     filename = sys.argv[2]
+
+    # validate counting mode
     if mode not in {'lines', 'words'}:
         print('Invalid mode: {}'.format(mode), file=sys.stderr)
         exit(1)
@@ -38,7 +41,7 @@ if __name__ == '__main__':
     except FileNotFoundError:
         print('File {} not found.'.format(filename), file=sys.stderr)
         exit(1)
-    except Exception:
-        print('Failed to read from file: {}'.format(
-            sys.exc_info()[0]), file=sys.stderr)
+    except OSError as err:
+        print('Failed to read from file: {}: reason: {}'.format(
+            filename, err), file=sys.stderr)
         exit(1)
