@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+# This script generates a simple systemd service file to run process on startup
+
+service_name=$1
+
+if [ -z "$service_name" ]; then
+	echo "Usage: $0 <service_name>"
+	exit 1
+fi
+
+read -p "Enter service description: " service_description
+read -p "Enter script path: " script_path
+read -p "Enter script arguments: " script_args
+read -p "Run process as user (default: root): " user
+
+cat <<EOF > ${service_name}.service
+[Unit]
+Description=${service_description}
+After=network.target
+
+[Service]
+User=${user:-"root"}
+ExecStart=${script_path} ${script_args}
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+echo
+echo "Service file generated: ${service_name}.service"
+echo "Its time to install the service."
+echo
+echo "1- Copy the file \`${service_name}.service\` to \`/etc/systemd/system/\` as root"
+echo "sudo cp ${service_name}.service /etc/systemd/system/"
+echo
+echo "2- Reload the systemd daemon"
+echo "sudo systemctl daemon-reload"
+echo
+echo "3- Enable and start the service"
+echo "sudo systemctl enable --now ${service_name}.service"
+echo
+echo "4- Check the service status"
+echo "sudo systemctl status ${service_name}.service"
+echo
