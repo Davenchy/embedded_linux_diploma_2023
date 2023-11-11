@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# This script performs calculations
+
+command -v bc 2>&1 > /dev/null
+if [ $? -ne 0 ]; then
+	echo "bc is not installed"
+	exit 1
+fi
+
+cmd=$1
+if [ -z "$cmd" ]; then
+	echo "Usage: $0 <command>"
+	exit 1
+fi
+
+echo "${cmd}" | bc
