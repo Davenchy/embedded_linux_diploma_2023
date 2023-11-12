@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# This script downloads a video from YouTube using its video ID.
+
+URL="$1"
+if [ -z "$URL" ]; then
+	echo "Usage: $0 <video_url>"
+	exit 1
+fi
+
+command -v youtube-dl 2>&1 > /dev/null
+is_dl_installed="$?"
+
+command -v yt-dlp 2>&1 > /dev/null
+is_dlp_installed="$?"
+
+if [ "$is_dl_installed" -eq 0 ] && [ "$is_dlp_installed" -eq 0 ]; then
+	echo "youtube-dl and yt-dlp are not installed. Please install one of them."
+	exit 1
+fi
+
+if [ "$is_dl_installed" -eq 0 ]; then
+	youtube-dl --ignore-errors --format mp4 --output "%(title)s.%(ext)s" "$URL"
+	exit 0
+else
+	yt-dlp --ignore-errors --format mp4 --output "%(title)s.%(ext)s" "$URL"
+fi
